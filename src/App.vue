@@ -1,57 +1,100 @@
 <template>
-  <div>
-    <p>firstName:{{ firstName }}</p>
-    <p>lastName:{{ lastName }}</p>
-    <p>fullName:{{ fullName }}</p>
-    <button @click="changeFullName">修改</button>
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <Header />
+      <List :todoList="todoList" @changeSignle="changeSignle" @deleteSignle="deleteSignle" />
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent,ref,computed } from 'vue'
+import { defineComponent } from "vue";
+
 export default defineComponent({
-  name: 'App'
-})
+  name: "App",
+});
 </script>
-<script lang="ts" setup>
 
-// 姓
-const firstName = ref('zhang')
-// 名
-const lastName = ref('san')
+<script setup lang="ts">
+import Header from "./components/Header/index.vue";
+import Footer from "./components/Footer/index.vue";
+import List from "./components/List/index.vue";
+import { nanoid } from 'nanoid'
+import { ref } from 'vue'
 
-//为姓名创建一个计算属性
-// 这是computed的对象写法,可以使用get和set方法
-const fullName = computed({
-  // 在获取的时候用'-'把姓和名分隔开
-  get(){
-    return firstName.value + '-' + lastName.value
-  },
-
-  // 在姓名被修改的时候,这个函数接收一个新值
-  set(newVal){
-    // 用split方法把新的姓和名提取出来
-    const [first,last] = newVal.split('-')
-
-    // 分别赋值给姓和名
-    firstName.value = first
-    lastName.value = last
-  }
-})
-
-
-// 也可以写成一个函数,但是是只读的,不可更改
-// const fullName = computed(()=>  firstName.value + '-' + lastName.value)
-
-// 修改姓名
- const changeFullName=()=>{
-  fullName.value = 'li-si'
+// 暴露todo的类型
+export interface todoType {
+  id: string,
+  thing: string,
+  done: boolean
 }
 
+// 暴露todoList的类型,它是由todo组成的数组
+export type todoListType = todoType[]
+
+// 用ref创建todoList的响应式数据
+const todoList = ref<todoListType>([
+  { id: nanoid(), thing: '吃饭', done: true },
+  { id: nanoid(), thing: '喝酒', done: false },
+  { id: nanoid(), thing: '按摩', done: false },
+])
 
 
+// 1.修改单个todo的状态,用下标来进行选择
+const changeSignle = (index: number) => {
+  todoList.value[index].done = !todoList.value[index].done
+}
 
-
+// 2.删除单个todo,用下标来进行选择删除
+const deleteSignle = (index: number) => {
+  todoList.value.splice(index, 1)
+}
 </script>
 
-<style lang="less" scoped></style>
+<style lang="scss">
+/*base*/
+body {
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #da4f49;
+  border: 1px solid #bd362f;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #bd362f;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+</style>

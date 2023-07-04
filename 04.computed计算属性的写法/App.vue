@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref,computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 export default defineComponent({
   name: 'App'
 })
@@ -24,14 +24,14 @@ const lastName = ref('san')
 // 这是computed的对象写法,可以使用get和set方法
 const fullName = computed({
   // 在获取的时候用'-'把姓和名分隔开
-  get(){
+  get() {
     return firstName.value + '-' + lastName.value
   },
 
   // 在姓名被修改的时候,这个函数接收一个新值
-  set(newVal){
+  set(newVal) {
     // 用split方法把新的姓和名提取出来
-    const [first,last] = newVal.split('-')
+    const [first, last] = newVal.split('-')
 
     // 分别赋值给姓和名
     firstName.value = first
@@ -44,7 +44,7 @@ const fullName = computed({
 // const fullName = computed(()=>  firstName.value + '-' + lastName.value)
 
 // 修改姓名
- const changeFullName=()=>{
+const changeFullName = () => {
   fullName.value = 'li-si'
 }
 
