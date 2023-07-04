@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <h1>当前页是:第{{current}}页---每页{{ limit }}条</h1>
-    <Pagination :current="current" :limit="limit" :totalPages="10" @update:current="current = $event" @update:limit="limit = $event"/>
-    <Pagination v-model:current="current" v-model:limit="limit" :totalPages="10"/>
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <Header @addTodo="addTodo"/>
+      <List  :todoList="todoList" @todoCheck="todoCheck" @deleteTodo="deleteTodo"/>
+      <Footer :todoList="todoList" @allChecked="allChecked" @deleteAllTodo="deleteAllTodo" />
+    </div>
   </div>
 </template>
 
@@ -15,10 +17,53 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-  import {ref} from 'vue'
+import Header from "./components/Header/index.vue";
+import Footer from "./components/Footer/index.vue";
+import List from "./components/List/index.vue";
+import { ref } from 'vue'
+import { nanoid } from "nanoid";
 
-  const current =ref(1)
-  const limit = ref(5)
+
+// todo的类型
+export interface todoType {
+  id: string
+  thing: string,
+  done: boolean
+}
+
+// todoList的类型
+export type todoListType = todoType[]
+
+// todoList初始数据
+const todoList = ref<todoListType>([
+  { id: nanoid(), thing: '落地', done: true },
+  { id: nanoid(), thing: '寻找', done: false },
+  { id: nanoid(), thing: '归土', done: false },
+])
+// 1.修改单个todo的状态
+const todoCheck = (index:number)=>{
+  todoList.value[index].done = !todoList.value[index].done
+}
+
+// 2.删除单个todo
+const deleteTodo = (index:number)=>{
+  todoList.value.splice(index,1)
+}
+
+// 3.添加todo
+const addTodo = (thing:string)=>{
+  todoList.value.push({id:nanoid(),thing,done:false})
+}
+
+// 全选
+const allChecked = (value:boolean)=>{
+  todoList.value.forEach(item => item.done = value)
+}
+
+// 批量删除
+const deleteAllTodo = ()=>{
+  todoList.value = todoList.value.filter(item => !item.done)
+}
 </script>
 
 <style lang="scss">
