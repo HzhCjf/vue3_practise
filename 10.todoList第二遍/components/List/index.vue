@@ -1,8 +1,8 @@
 <template>
     <ul class="todo-main">
-        <li v-for="todo,index in todoList" :key="todo.id" :class="{active:isActive === index}"  @mouseenter=" isActive = index" @mouseleave="isActive = -1" >
+        <li v-for="todo,index in todoList" :key="todo.id" :class="{active:isActive === index}" @mouseenter="isActive = index" @mouseleave="isActive = -1">
             <label>
-                <input type="checkbox" :checked="todo.done" @change="emits('changeTodo',index)" />
+                <input type="checkbox" :checked="todo.done" @change="emits('todoCheck',index)" />
                 <span>{{ todo.thing }}</span>
             </label>
             <button class="btn btn-danger" @click="emits('deleteTodo',index)">删除</button>
@@ -20,20 +20,20 @@ export default defineComponent({
   
 <script setup lang="ts">
 import { todoListType } from "../../App.vue";
-import {ref} from 'vue'
-// props
+import {ref} from "vue"
+
+// 接收App传来的todoList
 defineProps<{
     todoList:todoListType
 }>()
-
-// 接收的自定义函数
+// 接收App传来的自定义事件函数
 const emits = defineEmits<{
-    (event:'changeTodo',index:number):void;
+    (event:'todoCheck',index:number):void;
     (event:'deleteTodo',index:number):void
 }>()
 
-// 关于active类名的数据
-const isActive  = ref(-1)
+// 类名active的开关，初始值是-1，当鼠标移入todo的时候，值为这个todo的下标，移出就改回-1，这个值与todo的下标相等的时候就可以获得类名active
+const isActive = ref(-1)
 </script>
   
 <style  scoped lang="scss">

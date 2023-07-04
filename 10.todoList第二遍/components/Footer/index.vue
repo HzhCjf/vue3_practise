@@ -3,7 +3,7 @@
     <label>
       <input type="checkbox" v-model="allChecked" />
     </label>
-    <span> <span>已完成{{ todoNum }}</span> / 全部{{ todoList.length }} </span>
+    <span> <span>已完成{{ todoComplateNUm }}</span> / 全部{{ todoList.length }} </span>
     <button class="btn btn-danger" @click="emits('deleteAllTodo')">清除已完成任务</button>
   </div>
 </template>
@@ -18,28 +18,29 @@ export default defineComponent({
   
 <script setup lang="ts">
 import { computed } from "vue";
-import { todoListType } from "../../App.vue";
+import type { todoListType } from "../../App.vue";
 
-// props
-const props = defineProps<{
-  todoList:todoListType
-}>()
-
-// 接收的自定义事件函数
+// 接收App传来的自定义事件
 const emits = defineEmits<{
   (event:'allChecked',value:boolean):void;
   (event:'deleteAllTodo'):void
 }>()
 
-// 已完成数量
-const todoNum = computed(()=>{
-  return props.todoList.reduce((p,c)=> c.done?p+1:p,0)
+// 接收App传来的todoList
+const props = defineProps<{
+  todoList: todoListType
+}>()
+
+// 计算已完成的todo,当todo的done为true的时候就+1
+const todoComplateNUm = computed(() => {
+  return props.todoList.reduce((p, c) => c.done ? p + 1 : p,0)
 })
 
-// 全选
+// 全选按钮
 const allChecked = computed({
+  // 每一个todo的done都为true的时候并且todoList的长度不等于0选中全选
   get(){
-    return props.todoList.every(item => item.done) && props.todoList.length !==0
+    return props.todoList.every(item => item.done) && props.todoList.length !== 0 
   },
   set(newVal){
     emits('allChecked',newVal)

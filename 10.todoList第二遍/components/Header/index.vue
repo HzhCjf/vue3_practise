@@ -13,16 +13,18 @@ export default defineComponent({
 </script>
   
 <script setup lang="ts">
-// 接收的自定义事件函数
+// 接收App传来的自定义事件函数
 const emits = defineEmits<{
-  (event:'addTodo',thing:string):void
+  (event: 'addTodo', thing: string): void
 }>()
 
-// 添加todo
-const addTodo = (e:Event)=>{
+// 添加todo,$event的类型为Event
+const addTodo = (e: Event) => {
+  // 当e为Event的时候,target要断言为元素的类型,然后才能获取到value值,去掉空格
   const thing = (e.target as HTMLInputElement).value.trim()
-  if(!thing) return
-  emits('addTodo',thing);
+  // 当没有thing的时候直接返回
+  if (!thing) return
+  emits('addTodo', thing);
   (e.target as HTMLInputElement).value = ''
 }
 </script>
