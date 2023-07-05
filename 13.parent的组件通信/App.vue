@@ -1,10 +1,6 @@
 <template>
   <div>
-    <h1>App</h1>
-    <hr>
-    <Count/>
-    <hr>
-    <Moive/>
+    <One/>
   </div>
 </template>
 
@@ -15,8 +11,11 @@
   })
 </script>
 <script lang="ts" setup>
-import Count from './components/Count.vue';
-import Moive from './components/Moive.vue';
+  import One from '@/components/One.vue'
+
+  defineExpose({
+    count:1
+  })
 </script>
 
 <style lang="less" scoped>

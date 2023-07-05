@@ -1,10 +1,6 @@
 <template>
   <div>
-    <h1>App</h1>
-    <hr>
-    <Count/>
-    <hr>
-    <Moive/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -15,8 +11,7 @@
   })
 </script>
 <script lang="ts" setup>
-import Count from './components/Count.vue';
-import Moive from './components/Moive.vue';
+  
 </script>
 
 <style lang="less" scoped>
