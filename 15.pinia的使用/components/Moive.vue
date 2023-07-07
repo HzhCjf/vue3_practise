@@ -1,9 +1,11 @@
 <template>
+  <div>
     <h2>Moive</h2>
     <button @click="getMoiveList">获取电影列表</button>
     <ul>
       <li v-for="item in moiveList" :key="item.tvId">{{ item.albumName }}</li>
     </ul>
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,12 +15,12 @@
   })
 </script>
 <script lang="ts" setup>
-  import {storeToRefs} from 'pinia'
-  import useMoiveStore from '../store/modules/moive.ts'
-
+  import useMoiveStore from '../store/modules/moive'
+  import { storeToRefs } from 'pinia';
   const moiveStore = useMoiveStore()
   const {moiveList} = storeToRefs(moiveStore)
   const {getMoiveList} = moiveStore
+
 </script>
 
 <style lang="less" scoped>
